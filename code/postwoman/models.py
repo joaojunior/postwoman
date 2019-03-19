@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils.timezone import now
+from datetime import date
 
 
 class PostWoman(models.Model):
@@ -9,7 +9,7 @@ class PostWoman(models.Model):
 
 class Letter(models.Model):
     latitude = models.FloatField(default=0)
-    longitute = models.FloatField(default=0)
-    date = models.DateField(default=now)
+    longitude = models.FloatField(default=0)
+    date = models.DateField(default=date.today)
     delivered = models.BooleanField(default=False)
-    postman = models.ForeignKey(PostWoman, on_delete=models.CASCADE)
+    postwoman = models.ForeignKey(PostWoman, on_delete=models.CASCADE)
