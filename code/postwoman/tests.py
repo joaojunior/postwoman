@@ -31,3 +31,12 @@ class TestPostWomanCRUDWithAuthentication(APITestCase):
         expected = 201
         self.assertEqual(expected, request.status_code)
         self.assertEqual(data, request.data)
+
+    def test_create_new_postwoman_without_max_distance_return_sucess(self):
+        data = {'name': 'Name1'}
+        request = self.client.post(self.url, data)
+
+        expected = 201
+        expected_data = {'name': 'Name1', 'max_distance': 10.0}
+        self.assertEqual(expected, request.status_code)
+        self.assertEqual(expected_data, request.data)
