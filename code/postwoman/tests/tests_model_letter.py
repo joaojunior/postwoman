@@ -33,3 +33,12 @@ class TestLetterCRUDWithAuthentication(APITestCase):
 
         expected = 201
         self.assertEqual(expected, request.status_code)
+
+    def test_try_create_letter_duplicate_return_error(self):
+        postwoman = mommy.make('postwoman.PostWoman')
+        data = {'postwoman': self.base_postwoman_url.format(id=postwoman.id)}
+        self.client.post(self.url, data)
+        request = self.client.post(self.url, data)
+
+        expected = 400
+        self.assertEqual(expected, request.status_code)
