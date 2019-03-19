@@ -40,3 +40,11 @@ class TestPostWomanCRUDWithAuthentication(APITestCase):
         expected_data = {'name': 'Name1', 'max_distance': 10.0}
         self.assertEqual(expected, request.status_code)
         self.assertEqual(expected_data, request.data)
+
+    def test_try_create_duplicate_postwoman_return_error(self):
+        data = {'name': 'Name1'}
+        self.client.post(self.url, data)
+        request = self.client.post(self.url, data)
+
+        expected = 400
+        self.assertEqual(expected, request.status_code)
