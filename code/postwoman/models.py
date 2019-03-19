@@ -13,3 +13,9 @@ class Letter(models.Model):
     date = models.DateField(default=date.today)
     delivered = models.BooleanField(default=False)
     postwoman = models.ForeignKey(PostWoman, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (('latitude', 'longitude', 'date'),)
+        indexes = [
+            models.Index(fields=['date', 'postwoman'])
+        ]
