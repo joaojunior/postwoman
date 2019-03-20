@@ -35,3 +35,10 @@ class Letter(BaseModel):
         indexes = [
             models.Index(fields=['date', 'postwoman'])
         ]
+
+
+class PlaceToVisit(BaseModel):
+    name = models.CharField(max_length=200, unique=True)
+    latitude = models.FloatField(default=0)
+    longitude = models.FloatField(default=0)
+    postwoman = models.ForeignKey(PostWoman, on_delete=models.CASCADE)

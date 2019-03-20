@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from postwoman.models import PostWoman, PostOffice, Letter
+from postwoman.models import Letter, PostWoman, PostOffice, PlaceToVisit
 
 
 class PostWomanSerializer(serializers.HyperlinkedModelSerializer):
@@ -19,3 +19,9 @@ class PostOfficeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = PostOffice
         fields = ('name', 'latitude', 'longitude')
+
+
+class PlaceToVisitSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = PlaceToVisit
+        fields = ('name', 'latitude', 'longitude', 'postwoman')
