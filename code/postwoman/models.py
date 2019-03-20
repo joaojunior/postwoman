@@ -1,8 +1,11 @@
-from django.db import models
+import uuid
 from datetime import date
+
+from django.db import models
 
 
 class PostWoman(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200, unique=True)
     max_distance = models.FloatField(default=10)
 
