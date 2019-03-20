@@ -5,6 +5,7 @@ from postwoman import views
 
 router = routers.DefaultRouter()
 router.register('postwoman', views.PostWomanViewSet)
+router.register('letter', views.LetterViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
