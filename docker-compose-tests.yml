@@ -2,4 +2,4 @@ version: '3'
 
 services:
   api:
-    command: python manage.py test
+    command: sh run_tests.sh

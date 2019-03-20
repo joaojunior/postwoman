@@ -16,11 +16,17 @@ class PostOffice(BaseModel):
     latitude = models.FloatField(default=0)
     longitude = models.FloatField(default=0)
 
+    def __str__(self):
+        return self.name
+
 
 class PostWoman(BaseModel):
     name = models.CharField(max_length=200, unique=True)
     max_distance = models.FloatField(default=10)
-    postoffice = models.OneToOneField(PostOffice, on_delete=models.CASCADE)
+    postoffice = models.ForeignKey(PostOffice, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
 
 
 class Letter(BaseModel):
@@ -31,14 +37,17 @@ class Letter(BaseModel):
     postwoman = models.ForeignKey(PostWoman, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = (('latitude', 'longitude', 'date'),)
+        unique_together = (('latitude', 'longitude', 'date', 'postwoman'),)
         indexes = [
             models.Index(fields=['date', 'postwoman'])
         ]
 
 
 class PlaceToVisit(BaseModel):
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(max_length=200)
     latitude = models.FloatField(default=0)
     longitude = models.FloatField(default=0)
     postwoman = models.ForeignKey(PostWoman, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (('name', 'postwoman'),)
