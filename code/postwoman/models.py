@@ -11,9 +11,16 @@ class BaseModel(models.Model):
         abstract = True
 
 
+class PostOffice(BaseModel):
+    name = models.CharField(max_length=200, unique=True)
+    latitude = models.FloatField(default=0)
+    longitude = models.FloatField(default=0)
+
+
 class PostWoman(BaseModel):
     name = models.CharField(max_length=200, unique=True)
     max_distance = models.FloatField(default=10)
+    postoffice = models.OneToOneField(PostOffice, on_delete=models.CASCADE)
 
 
 class Letter(BaseModel):
@@ -28,9 +35,3 @@ class Letter(BaseModel):
         indexes = [
             models.Index(fields=['date', 'postwoman'])
         ]
-
-
-class PostOffice(BaseModel):
-    name = models.CharField(max_length=200, unique=True)
-    latitude = models.FloatField(default=0)
-    longitude = models.FloatField(default=0)
