@@ -28,3 +28,9 @@ class Letter(BaseModel):
         indexes = [
             models.Index(fields=['date', 'postwoman'])
         ]
+
+
+class PostOffice(BaseModel):
+    name = models.CharField(max_length=200, unique=True)
+    latitude = models.FloatField(default=0)
+    longitude = models.FloatField(default=0)

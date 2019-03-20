@@ -1,7 +1,8 @@
 from rest_framework import viewsets, permissions
 
-from postwoman.serializers import PostWomanSerializer, LetterSerializer
-from postwoman.models import PostWoman, Letter
+from postwoman.serializers import (PostWomanSerializer, PostOfficeSerializer,
+                                   LetterSerializer)
+from postwoman.models import PostWoman, PostOffice, Letter
 
 
 class BaseViewSet(viewsets.ModelViewSet):
@@ -16,3 +17,8 @@ class PostWomanViewSet(BaseViewSet):
 class LetterViewSet(BaseViewSet):
     queryset = Letter.objects.all().order_by('-date', 'latitude', 'longitude')
     serializer_class = LetterSerializer
+
+
+class PostOfficeViewSet(BaseViewSet):
+    queryset = PostOffice.objects.all().order_by('name')
+    serializer_class = PostOfficeSerializer
