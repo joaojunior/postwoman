@@ -42,3 +42,14 @@ class TestLetterCRUDWithAuthentication(APITestCase):
 
         expected = 400
         self.assertEqual(expected, request.status_code)
+
+    def test_create_new_letter_with_all_fields_return_sucess(self):
+        postwoman = mommy.make('postwoman.PostWoman')
+        data = {
+            'latitude': 1, 'longitude': 2, 'date': '2019-03-20',
+            'delivered': False,
+            'postwoman': self.base_postwoman_url.format(id=postwoman.id)}
+        request = self.client.post(self.url, data)
+
+        expected = 201
+        self.assertEqual(expected, request.status_code)
