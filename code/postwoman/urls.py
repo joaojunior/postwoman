@@ -7,6 +7,7 @@ router = routers.DefaultRouter()
 router.register('postwoman', views.PostWomanViewSet)
 router.register('postoffice', views.PostOfficeViewSet)
 router.register('letter', views.LetterViewSet)
+router.register('placetovisit', views.PlaceToVisitViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

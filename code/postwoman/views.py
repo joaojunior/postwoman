@@ -1,8 +1,9 @@
 from rest_framework import viewsets, permissions
 
-from postwoman.serializers import (PostWomanSerializer, PostOfficeSerializer,
-                                   LetterSerializer)
-from postwoman.models import PostWoman, PostOffice, Letter
+from postwoman.serializers import (LetterSerializer, PostWomanSerializer,
+                                   PostOfficeSerializer,
+                                   PlaceToVisitSerializer)
+from postwoman.models import PostWoman, PostOffice, Letter, PlaceToVisit
 
 
 class BaseViewSet(viewsets.ModelViewSet):
@@ -22,3 +23,8 @@ class LetterViewSet(BaseViewSet):
 class PostOfficeViewSet(BaseViewSet):
     queryset = PostOffice.objects.all().order_by('name')
     serializer_class = PostOfficeSerializer
+
+
+class PlaceToVisitViewSet(BaseViewSet):
+    queryset = PlaceToVisit.objects.all().order_by('name')
+    serializer_class = PlaceToVisitSerializer
