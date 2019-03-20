@@ -4,13 +4,19 @@ from datetime import date
 from django.db import models
 
 
-class PostWoman(models.Model):
+class BaseModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    class Meta:
+        abstract = True
+
+
+class PostWoman(BaseModel):
     name = models.CharField(max_length=200, unique=True)
     max_distance = models.FloatField(default=10)
 
 
-class Letter(models.Model):
+class Letter(BaseModel):
     latitude = models.FloatField(default=0)
     longitude = models.FloatField(default=0)
     date = models.DateField(default=date.today)
