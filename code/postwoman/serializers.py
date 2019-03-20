@@ -6,7 +6,7 @@ from postwoman.models import PostWoman, PostOffice, Letter
 class PostWomanSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = PostWoman
-        fields = ('name', 'max_distance')
+        fields = ('name', 'max_distance', 'postoffice')
 
 
 class LetterSerializer(serializers.HyperlinkedModelSerializer):
