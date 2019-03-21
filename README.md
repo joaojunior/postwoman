@@ -23,3 +23,56 @@ doesn't get to see everything on her first day.
 - Any question about the problem should be answered in assumptions.
 - A full flexed service
 - Surprise us!
+
+# Assumptions
+ - Jane does not return to PostOffice in the final of the day.
+ - When exit from the PostOffice, the first place that Jane visit is always a place to deliver a letter.
+ - Jane only can collect letters from 1 PostOffice.
+ - Jane visit places within a `max_distance`. This valus is configured.
+ - All places are consider with latitude and longitude and we will calculate the distance based on it.
+
+# Idea
+For resolve this problem, we will create an api that is possible input all the values and calculate the route for Jane.
+We will create a database with 5 tables:
+1) PostWoman: This table save the name of the postwoman, the postoffice that she will collect the letters and the value of `max_distance`(in km) to consider visit a place.
+2) PostOffice: Table to save the name, latitude and longitute of the postoffice.
+3) Letters: Table to save all the letters that the postwoman need to deliver.
+4) PlaceToVisit: Table to save the places that the postwoman would like to visit.
+5) RouteResult: Table to save the route and its total cost.
+
+## API
+The api is a RESTful api for us send GET's and POST's requests. It is composed by 5 endpoints:
+- `/api/postwoman`: Endpoint to CRUD operations of postwoman.
+- `/api/postoffice`: Endpoint to CRUD operations of postoffice.
+- `/api/letters`: Endpoint to CRUD operations of letters.
+- `/api/placetovisit`: Endpoint to CRUD operations of placetovisit.
+- `/api/route`: Endpoint to calculate and return the route for a postwoman in a specific day.
+
+## Calculate a route
+To calculate a route for a specific postwoman and day, we create a direct graph where the set of nodes is: 1) PostOffice, that is the start point, 2) places to deliver a letter(Deliver Points) and 3) Places that the postwoman would like to visit(PlaceToVisit).
+
+For each node in the set of nodes compost by nodes in 1) and 2) we create 2 arcs(source-->dest and dest-->source) with cost equal the distance calculated between the latitude and longitude of these nodes. At this point, we have a complete graph.
+
+For the set of nodes compost by nodes in 2) and 3) we create an arc from a node in the set 3) to a node in the set 2) with cost equal the distance calculated between the latitude and longitude of these nodes. If this distance is less than or equal to `max_distance`, we add the reverse arc too. This is to be possible go from any PlaceToVisit to Deliver Points but is only possible go from Deliver Points to PlaceToVisit, if the distance is less than or equal the maximum distance allowed.
+
+The heuristic to calculate the route is very simple and consist in go to nearest location not yet visited. To make this efficient, in the graph explained before,we use a MinHeap to store the adjacents nodes of a node. Each item in this MinHeap is compost by the distance and the node. Then, the first place of this MinHeap store the nearest adjacent node.
+
+# Requirements
+To run the solution is necessary we have the docker and the docker-compose installed in the host machine.
+In the docker container, we will install all that is necessary:
+- Python, version 3.7
+- Django, version 2.1.7
+- DjangoRestFramework, version 3.9.2
+- Postgres, version 11.2
+
+# How to run
+To run the solution, from the main folder of this repo, we can run the command:
+```
+docker-compose up --build
+```
+
+# How to run the tests
+To run the tests, from the main folder of this repo, we can run the command:
+```
+docker-compose -f docker-compose.yml -f docker-compose-tests.yml up --build
+```
