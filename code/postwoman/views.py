@@ -1,4 +1,5 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
+from rest_framework.response import Response
 
 from postwoman.serializers import (LetterSerializer, PostWomanSerializer,
                                    PostOfficeSerializer,
@@ -35,3 +36,16 @@ class PlaceToVisitViewSet(BaseViewSet):
 class RouteViewSet(BaseViewSet):
     queryset = Route.objects.all().order_by('-date')
     serializer_class = RouteSerializer
+    http_method_names = ['post']
+
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        if serializer.is_valid():
+            postwoman = serializer.validated_data['postwoman']
+            print(postwoman.id)
+            serializer.save(route={})
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)

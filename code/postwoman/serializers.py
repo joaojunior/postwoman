@@ -32,3 +32,4 @@ class RouteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Route
         fields = ('date', 'postwoman', 'route')
+        read_only_fields = ('route',)

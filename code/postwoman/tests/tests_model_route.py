@@ -44,17 +44,7 @@ class TestRouteCRUDWithAuthentication(APITestCase):
         self.assertEqual(expected, request.status_code)
         self.assertEqual(expected_data, request.data)
 
-    def test_create_new_route_without_route_return_error(self):
-        postwoman = mommy.make('postwoman.PostWoman')
-        data = {
-            'date': '1942-12-01',
-            'postwoman': self.base_postwoman_url.format(id=postwoman.id)}
-        request = self.client.post(self.url, data)
-
-        expected = 400
-        self.assertEqual(expected, request.status_code)
-
-    def test_create_new_postwoman_without_route_return_error(self):
+    def test_create_new_route_without_postwoman_return_error(self):
         data = {'date': '1942-12-01', 'route': '{}'}
         request = self.client.post(self.url, data)
 
