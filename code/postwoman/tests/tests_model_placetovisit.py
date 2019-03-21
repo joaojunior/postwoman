@@ -40,7 +40,7 @@ class TestPostWomanCRUDWithAuthentication(APITestCase):
                       self.base_postwoman_url.format(id=postwoman.id))
         expected_data = {
             'name': 'Name1', 'latitude': 1, 'longitude': 2,
-            'postwoman': url}
+            'postwoman': url, 'visited': False}
         self.assertEqual(expected, request.status_code)
         self.assertEqual(expected_data, request.data)
 
@@ -56,7 +56,7 @@ class TestPostWomanCRUDWithAuthentication(APITestCase):
                       self.base_postwoman_url.format(id=postwoman.id))
         expected_data = {
             'name': 'Name1', 'latitude': 0, 'longitude': 0,
-            'postwoman': url}
+            'postwoman': url, 'visited': False}
         self.assertEqual(expected, request.status_code)
         self.assertEqual(expected_data, request.data)
 

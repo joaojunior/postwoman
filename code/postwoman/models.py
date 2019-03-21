@@ -49,6 +49,7 @@ class PlaceToVisit(BaseModel):
     latitude = models.FloatField(default=0)
     longitude = models.FloatField(default=0)
     postwoman = models.ForeignKey(PostWoman, on_delete=models.CASCADE)
+    visited = models.BooleanField(default=False)
 
     class Meta:
         unique_together = (('name', 'postwoman'),)

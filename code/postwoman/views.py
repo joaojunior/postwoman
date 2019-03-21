@@ -49,7 +49,8 @@ class RouteViewSet(BaseViewSet):
                                                  delivered=False,
                                                  date=date))
             places_to_visit = list(PlaceToVisit.objects.filter(
-                postwoman=postwoman.id))
+                postwoman=postwoman.id,
+                visited=False))
             route = calculate_route(postwoman.postoffice, letters,
                                     places_to_visit, postwoman.max_distance)
             serializer.save(route=route)
