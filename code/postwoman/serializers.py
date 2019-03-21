@@ -25,10 +25,11 @@ class PostOfficeSerializer(serializers.HyperlinkedModelSerializer):
 class PlaceToVisitSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = PlaceToVisit
-        fields = ('name', 'latitude', 'longitude', 'postwoman')
+        fields = ('name', 'latitude', 'longitude', 'postwoman', 'visited')
 
 
 class RouteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Route
         fields = ('date', 'postwoman', 'route')
+        read_only_fields = ('route',)
