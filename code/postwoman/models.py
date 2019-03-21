@@ -2,6 +2,7 @@ import uuid
 from datetime import date
 
 from django.db import models
+from django.contrib.postgres import fields
 
 
 class BaseModel(models.Model):
@@ -51,3 +52,12 @@ class PlaceToVisit(BaseModel):
 
     class Meta:
         unique_together = (('name', 'postwoman'),)
+
+
+class Route(BaseModel):
+    postwoman = models.ForeignKey(PostWoman, on_delete=models.CASCADE)
+    date = models.DateField(default=date.today)
+    route = fields.JSONField()
+
+    class Meta:
+        unique_together = (('date', 'postwoman'),)
