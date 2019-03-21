@@ -7,6 +7,7 @@ from postwoman.serializers import (LetterSerializer, PostWomanSerializer,
                                    RouteSerializer)
 from postwoman.models import (PostWoman, PostOffice, Letter,
                               PlaceToVisit, Route)
+from postwoman.route import calculate_route
 
 
 class BaseViewSet(viewsets.ModelViewSet):
@@ -42,9 +43,16 @@ class RouteViewSet(BaseViewSet):
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request})
         if serializer.is_valid():
+            date = serializer.validated_data['date']
             postwoman = serializer.validated_data['postwoman']
-            print(postwoman.id)
-            serializer.save(route={})
+            letters = list(Letter.objects.filter(postwoman=postwoman.id,
+                                                 delivered=False,
+                                                 date=date))
+            places_to_visit = list(PlaceToVisit.objects.filter(
+                postwoman=postwoman.id))
+            route = calculate_route(postwoman.postoffice, letters,
+                                    places_to_visit, postwoman.max_distance)
+            serializer.save(route=route)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors,
