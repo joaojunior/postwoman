@@ -1,1 +1,4 @@
 model_mommy==1.6.0
+coverage==4.5.3
+radon==3.0.1
+flake8==3.7.7

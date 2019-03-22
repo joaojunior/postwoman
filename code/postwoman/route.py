@@ -25,7 +25,9 @@ class Path():
 
     def calculate_simple_path(self, graph: Graph, start):
         self.graph = graph
-        self.route = [(str(start.id), start.__class__.__name__, 0)]
+        self.route = [{'id': str(start.id),
+                       'type': start.__class__.__name__,
+                       'accumulated distance': 0}]
         self.visited = {}
         self.total_cost = 0
         for node_id in self.graph.nodes:
@@ -41,8 +43,12 @@ class Path():
         if next_node is not None:
             self.visited[next_node.id] = True
             self.total_cost += distance
-            self.route.append((str(next_node.id), next_node.__class__.__name__,
-                              self.route[-1][2] + distance))
+            self.route.append({
+                'id': str(next_node.id),
+                'type': next_node.__class__.__name__,
+                'accumulated distance': (
+                    self.route[-1]['accumulated distance'] + distance)
+            })
             self.visit(next_node.id)
 
     def get_next_nearby_node_not_visited(self, node_id: str):
