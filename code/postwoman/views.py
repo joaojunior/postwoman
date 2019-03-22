@@ -1,3 +1,4 @@
+from django.db import IntegrityError, transaction
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 
@@ -37,7 +38,7 @@ class PlaceToVisitViewSet(BaseViewSet):
 class RouteViewSet(BaseViewSet):
     queryset = Route.objects.all().order_by('-date')
     serializer_class = RouteSerializer
-    http_method_names = ['post']
+    http_method_names = ['post', 'get']
 
     def create(self, request):
         serializer = self.serializer_class(data=request.data,
@@ -51,10 +52,33 @@ class RouteViewSet(BaseViewSet):
             places_to_visit = list(PlaceToVisit.objects.filter(
                 postwoman=postwoman.id,
                 visited=False))
-            route = calculate_route(postwoman.postoffice, letters,
-                                    places_to_visit, postwoman.max_distance)
-            serializer.save(route=route)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+            try:
+                route = calculate_route(postwoman.postoffice, letters,
+                                        places_to_visit,
+                                        postwoman.max_distance)
+            except Exception:
+                return Response({'error': 'Error during calculate the route'},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            places_visited = []
+            for node in route['route']:
+                if node['type'] == 'PlaceToVisit':
+                    places_visited.append(node['id'])
+            try:
+                with transaction.atomic():
+                    if places_visited:
+                        PlaceToVisit.objects.filter(
+                            id__in=places_visited).update(visited=True)
+                    Letter.objects.filter(postwoman=postwoman.id,
+                                          delivered=False,
+                                          date=date).update(delivered=True)
+                    serializer.save(route=route)
+                    return Response(serializer.data,
+                                    status=status.HTTP_201_CREATED)
+            except IntegrityError:
+                return Response({'error': 'IntegrityError'},
+                                status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)

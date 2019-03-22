@@ -3,6 +3,7 @@ from datetime import date
 
 from django.db import models
 from django.contrib.postgres import fields
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class BaseModel(models.Model):
@@ -14,8 +15,11 @@ class BaseModel(models.Model):
 
 class PostOffice(BaseModel):
     name = models.CharField(max_length=200, unique=True)
-    latitude = models.FloatField(default=0)
-    longitude = models.FloatField(default=0)
+    latitude = models.FloatField(default=0, validators=[MinValueValidator(-90),
+                                                        MaxValueValidator(90)])
+    longitude = models.FloatField(default=0,
+                                  validators=[MinValueValidator(-180),
+                                              MaxValueValidator(180)])
 
     def __str__(self):
         return self.name
@@ -31,8 +35,11 @@ class PostWoman(BaseModel):
 
 
 class Letter(BaseModel):
-    latitude = models.FloatField(default=0)
-    longitude = models.FloatField(default=0)
+    latitude = models.FloatField(default=0, validators=[MinValueValidator(-90),
+                                                        MaxValueValidator(90)])
+    longitude = models.FloatField(default=0,
+                                  validators=[MinValueValidator(-180),
+                                              MaxValueValidator(180)])
     date = models.DateField(default=date.today)
     delivered = models.BooleanField(default=False)
     postwoman = models.ForeignKey(PostWoman, on_delete=models.CASCADE)
@@ -46,8 +53,11 @@ class Letter(BaseModel):
 
 class PlaceToVisit(BaseModel):
     name = models.CharField(max_length=200)
-    latitude = models.FloatField(default=0)
-    longitude = models.FloatField(default=0)
+    latitude = models.FloatField(default=0, validators=[MinValueValidator(-90),
+                                                        MaxValueValidator(90)])
+    longitude = models.FloatField(default=0,
+                                  validators=[MinValueValidator(-180),
+                                              MaxValueValidator(180)])
     postwoman = models.ForeignKey(PostWoman, on_delete=models.CASCADE)
     visited = models.BooleanField(default=False)
 

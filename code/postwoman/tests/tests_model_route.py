@@ -38,7 +38,9 @@ class TestRouteCRUDWithAuthentication(APITestCase):
         expected = 201
         url = urljoin('http://testserver/',
                       self.base_postwoman_url.format(id=postwoman.id))
-        route = {'route': [(str(postwoman.postoffice.id), 'PostOffice', 0)],
+        route = {'route': [{'id': str(postwoman.postoffice.id),
+                            'type': 'PostOffice',
+                            'accumulated distance': 0}],
                  'total_cost': 0}
         expected_data = {
             'date': '1942-12-01', 'route': route,

@@ -4,6 +4,7 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /code
 ADD requirements.txt /code
 ADD requirements_tests.txt /code
+ADD .flake8 /code
 ADD run.sh /code
 ADD run_tests.sh /code
 RUN pip install -r requirements.txt

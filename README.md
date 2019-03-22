@@ -70,9 +70,21 @@ To run the solution, from the main folder of this repo, we can run the command:
 ```
 docker-compose up --build
 ```
+After run this command, we can open the browser in the address: http://127.0.0.1:8000/api to interact with the solution.
+The database already start with 1 PostOffice, 1 Postwoman, 1000 Letters(randomly distributed in 7 days) and 100 Places To Visit.
+We can go to http://127.0.0.1:8000/api/route/, and send a Post for a PostWoman and date and then verify the route calculated.
 
 # How to run the tests
 To run the tests, from the main folder of this repo, we can run the command:
 ```
-docker-compose -f docker-compose.yml -f docker-compose-tests.yml up --build
+docker-compose -f docker-compose.yml -f docker-compose-tests.yml up --build --exit-code-from api
 ```
+
+After run the tests we can see the report about coverage, flake8 and radon.
+
+# Heroku
+This solution was deployed in the heroku, and we can access in the address: https://postwoman.herokuapp.com/api/
+
+# Improvements
+- Put Nginx in front of gunicorn to manipulate the static files.
+- Put the celery to calculate the route asynchronously.
